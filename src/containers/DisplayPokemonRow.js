@@ -1,20 +1,31 @@
 import React, {useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
+// install Swiper components
+SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles,withStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
+import Collapse from '@material-ui/core/Collapse';
+import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { red,blue, green, yellow, orange, pink } from '@material-ui/core/colors';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import ShareIcon from '@material-ui/icons/Share';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
 import Skeleton from '@material-ui/lab/Skeleton';
 
+import { graphql } from "react-apollo";
 import { gql, useQuery, useLazyQuery  } from '@apollo/client';
 
 import Formatter from '../services/formatter';
@@ -103,6 +114,7 @@ export default function DisplayPokemonRow(props) {
   const [offset, setOffset] = useState(1)
   const [limit, setLimit] = useState(20)
   const prevOwned = useRef();
+  const prevData = useRef();
   
   const GET_POKEMONS = gql`
   query pokemons($limit: Int, $offset: Int) {
@@ -155,37 +167,15 @@ export default function DisplayPokemonRow(props) {
       window.removeEventListener("scroll", handleScroll);
     }
   }, []);
-  
-
-  useEffect(() => {
-    if (isBottom) {
-      // addItems();             
-    }
-  }, [isBottom]);
     
-  useEffect(() => {
-    let arrExpand = []
-    let arrOwned = []
-    if(dataPokemons){
-      // arrExpand = dataPokemons.map(item => {
-      //   return false
-      // });
-      arrOwned = dataPokemons.map(item => {
-        return {
-          name: item.name,
-          count: 0
-        }
-      });
-    }    
-    setExpanded(arrExpand)
-    setOwnedInfo(arrOwned)
-    prevOwned.current = arrOwned
-
-  },[dataPokemons])
-
-  useEffect(() => {
-    
+  useEffect(() => {            
     if(reducer.data){
+      if(isFetchScroll){
+        let resetInfoOwned =  ownedInfo.map(item => {
+          item.count = 0
+          return item
+        })   
+      }
       setLoadingOwned(false)
       let wait = true
       let newOwnedInfo = ownedInfo.map((item,idx) => {
@@ -200,10 +190,10 @@ export default function DisplayPokemonRow(props) {
       // setOwnedInfo(newOwnedInfo)     
       if(prevOwned.current != ownedInfo){        
         prevOwned.current = newOwnedInfo
-      }        
-      if(!wait)setLoadingOwned(true)      
-    }
-
+      }          
+      if(!wait)setLoadingOwned(true) 
+      if(isFetchScroll)setIsFetchScroll(false) 
+    }    
   },[reducer,dataPokemons])
 
   useEffect(() => {
@@ -214,11 +204,11 @@ export default function DisplayPokemonRow(props) {
       })   
       // setOwnedInfo(resetInfoOwned)   
       if(prevOwned.current != ownedInfo){        
-        prevOwned.current = newOwnedInfo
+        prevOwned.current = resetInfoOwned
       }     
-      dispatch(fetchAllData());            
+      dispatch(fetchAllData());                  
     }
-    props.setFlagAdded(false)
+    props.setFlagAdded(false)    
   }, [props.flagAdded]);
 
   const handleExpandClick = (idx) => {    
@@ -268,21 +258,35 @@ export default function DisplayPokemonRow(props) {
       
     if(res.data.pokemon_v2_pokemon.length == 0){
       //empty
-    }
+    }    
     
-    if(res_ != dataPokemons){
-      setOffset(offset_)        
-      setDataPokemons([...dataPokemons, ...res_]);      
-      setIsFetchScroll(false)
+    if(res_ != dataPokemons){   
+      let arrOwned = res_.map(item => {        
+        return {
+          name: item.name,
+          count: 0
+        }       
+      });      
+      setOffset(offset_)  
+      setOwnedInfo([...ownedInfo, ...arrOwned]);             
+      setDataPokemons([...dataPokemons, ...res_]);                                                 
     }
   }  
 
   if(data){           
     if(dataPokemons.length == 0){          
       let res = Formatter.formatData(data.pokemon_v2_pokemon)   
-      setDataPokemons(res)             
-    }         
+      setDataPokemons(res)          
+      let arrOwned = res.map(item => {
+        return {
+          name: item.name,
+          count: 0
+        }
+      });             
+      setOwnedInfo(arrOwned)   
+    }                 
   }
+  
 
   const {selectPokemonHandler} = props; 
       
