@@ -63,7 +63,11 @@ function Navbar (props) {
   const [
     getData, 
     { data }
-  ] = useLazyQuery(GET_POKEMONS_SEACRH);
+  ] = useLazyQuery(GET_POKEMONS_SEACRH,{
+    onError(error) {
+      handleError(error.message)
+    }
+  });
  
 
   useEffect(() => {
@@ -151,6 +155,12 @@ function Navbar (props) {
 
   const handleInfoClose = () => {
     setOpenNotif(false);
+  };
+
+  const handleError = (error) => {                
+    setTitleNotif("Error")
+    setMsgNotif(error)      
+    setOpenNotif(true)
   };
 
   return (

@@ -47,7 +47,11 @@ function MainContent(props) {
   const [
     getData, 
     { data }
-  ] = useLazyQuery(GET_POKEMONS_HEADER);
+  ] = useLazyQuery(GET_POKEMONS_HEADER,{
+    onError(error) {
+      props.handleError(error.message)
+    }
+  });
 
   useEffect(() => {            
     
@@ -55,7 +59,12 @@ function MainContent(props) {
     const pokeID = rndInt;
     
     if(!data){     
-      getData({ variables: {id: pokeID}})         
+      try {
+        getData({ variables: {id: pokeID}})
+      } catch (error) {
+        console.log(error)
+      }
+               
     }  
 
   }, []);
@@ -78,6 +87,7 @@ function MainContent(props) {
           selectPokemonHandler={selectPokemonHandler}
           flagAdded={props.flagAdded}
           setFlagAdded={props.setFlagAdded}
+          handleError={props.handleError}
         />                
       </div>       
       {data &&

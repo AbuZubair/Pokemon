@@ -32,7 +32,7 @@ function Home() {
   const [buttonLabelForm,setButtonLabelForm] = useState("");
   const [titleNotif,setTitleNotif] = useState("");
   const [msgNotif,setMsgNotif] = useState("");
-  const [flagAdded,setFlagAdded] = useState(false);
+  const [flagAdded,setFlagAdded] = useState(false); 
   const location = useLocation();
 
   const selectPokemonHandler = async (pokemon) => {
@@ -221,6 +221,12 @@ function Home() {
     }
   }
 
+  const handleError = (error) => {                
+    setTitleNotif("Error")
+    setMsgNotif(error)      
+    hanldeSetOpen(true)
+  };
+
   return (
     <>
       
@@ -232,6 +238,7 @@ function Home() {
           errorInputForm={errorInputForm}
           flagAdded={flagAdded}
           setFlagAdded={setFlagAdded}
+          handleError={handleError}
         />
       </div>
 

@@ -147,7 +147,11 @@ export default function DisplayPokemonRow(props) {
   const [
     getData, 
     { loading, data }
-  ] = useLazyQuery(GET_POKEMONS);
+  ] = useLazyQuery(GET_POKEMONS,{
+    onError(error) {
+      props.handleError(error.message)
+    }
+  });
 
   const { refetch } = useQuery(GET_POKEMONS,
     { variables: {offset: offset, limit: limit}}
@@ -156,7 +160,7 @@ export default function DisplayPokemonRow(props) {
   useEffect(() => {
     if(!data){     
       dispatch(fetchAllData());
-      getData({ variables: {offset: offset, limit: limit}}) 
+      getData({ variables: {offset: offset, limit: limit}})       
     }   
         
     window.addEventListener("resize", handleResize);
@@ -253,24 +257,29 @@ export default function DisplayPokemonRow(props) {
   };
 
   const handleRefetch = async (offset_) => { 
-    const res = await refetch({ offset: offset_})  
-    let res_ = Formatter.formatData(res.data.pokemon_v2_pokemon)   
+    try {
+      const res = await refetch({ offset: offset_})  
+      let res_ = Formatter.formatData(res.data.pokemon_v2_pokemon)   
+        
+      if(res.data.pokemon_v2_pokemon.length == 0){
+        //empty
+      }    
       
-    if(res.data.pokemon_v2_pokemon.length == 0){
-      //empty
-    }    
-    
-    if(res_ != dataPokemons){   
-      let arrOwned = res_.map(item => {        
-        return {
-          name: item.name,
-          count: 0
-        }       
-      });      
-      setOffset(offset_)  
-      setOwnedInfo([...ownedInfo, ...arrOwned]);             
-      setDataPokemons([...dataPokemons, ...res_]);                                                 
+      if(res_ != dataPokemons){   
+        let arrOwned = res_.map(item => {        
+          return {
+            name: item.name,
+            count: 0
+          }       
+        });      
+        setOffset(offset_)  
+        setOwnedInfo([...ownedInfo, ...arrOwned]);             
+        setDataPokemons([...dataPokemons, ...res_]);                                                 
+      }
+    } catch (error) {
+      props.handleError(error.message)
     }
+    
   }  
 
   if(data){           
