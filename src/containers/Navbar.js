@@ -111,7 +111,7 @@ function Navbar (props) {
   /** Make API call as soon as the user starts typing.  */
   const makeAipCall = async () => {   
     if(userInput){      
-      getData({ variables: {name: `%${userInput}%`}})                       
+      getData({ variables: {name: `%${userInput.toLowerCase()}%`}})                       
     }      
   }
 
