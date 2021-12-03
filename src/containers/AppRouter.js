@@ -8,7 +8,7 @@ import Mylist from './Mylist';
 import Navbar from './Navbar';
 
 const AppRouter = () => (
-  <BrowserRouter>
+  // <BrowserRouter>
     <>
       <Navbar />
       <Switch>
@@ -18,7 +18,7 @@ const AppRouter = () => (
         <Route component={NotFound} />
       </Switch>
     </>
-  </BrowserRouter>
+  // </BrowserRouter>
 );
 
 export default AppRouter;

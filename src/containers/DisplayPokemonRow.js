@@ -174,12 +174,7 @@ export default function DisplayPokemonRow(props) {
     
   useEffect(() => {            
     if(reducer.data){
-      if(isFetchScroll){
-        let resetInfoOwned =  ownedInfo.map(item => {
-          item.count = 0
-          return item
-        })   
-      }
+      resetOwnedData()
       setLoadingOwned(false)
       let wait = true
       let newOwnedInfo = ownedInfo.map((item,idx) => {
@@ -190,8 +185,7 @@ export default function DisplayPokemonRow(props) {
         }
         if(idx==ownedInfo.length-1)wait = false
         return item
-      })      
-      // setOwnedInfo(newOwnedInfo)     
+      })          
       if(prevOwned.current != ownedInfo){        
         prevOwned.current = newOwnedInfo
       }          
@@ -237,6 +231,15 @@ export default function DisplayPokemonRow(props) {
     if (scrollTop + window.innerHeight + 50 >= scrollHeight){
       setIsBottom(true);
     }
+  }
+
+  const resetOwnedData = () => {
+    let resetInfoOwned =  ownedInfo.map(item => {
+      item.count = 0
+      return item
+    })   
+  
+    setOwnedInfo(resetInfoOwned)
   }
 
   const addItems = async () => {
@@ -291,7 +294,7 @@ export default function DisplayPokemonRow(props) {
           name: item.name,
           count: 0
         }
-      });             
+      });      
       setOwnedInfo(arrOwned)   
     }                 
   }

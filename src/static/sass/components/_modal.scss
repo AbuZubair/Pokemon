@@ -26,6 +26,8 @@
       height: 100%;
       padding-left: 5rem;
       overflow-y: scroll;
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
       padding-bottom: 2rem;
 
       @include responsive(tab_port) {
@@ -44,6 +46,10 @@
       }
    }
 
+   &__container::-webkit-scrollbar {
+      display: none;
+   }
+    
    &__title {
       font-size: 4rem;
       text-transform: capitalize;

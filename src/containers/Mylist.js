@@ -20,6 +20,8 @@ import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+import db from '../config'
+
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,

@@ -9,6 +9,7 @@ import Notif from '../components/UI/Notif';
 import ModalForm from '../components/UI/ModalForm';
 import FirebaseService from '../services/firebase';
 import Formatter from '../services/formatter';
+import Event from '../eventTracker'
 
 import db from '../config'
 
@@ -72,6 +73,7 @@ function Home() {
     if(inputUser!=''){
       try {
         const response = await FirebaseService.getByUsername(inputUser.toLowerCase().trim())
+        Event("SIGNIN", "Join the game", response.id)
         if(!response){
           storeUserData()
         }else{                    

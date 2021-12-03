@@ -107,7 +107,7 @@ div.swiper-button-next {
          margin-right: unset !important;
 
          &---loadingContainer{
-            min-height: 600px;
+            min-height: 700px;
             position: absolute;
             top: 0;
             left: 0;
@@ -116,7 +116,7 @@ div.swiper-button-next {
 
             &----bar{
                position: absolute;
-               top:50%;
+               top:40%;
                left:50%;
                @include responsive(tab_port) {
                   left:45% !important;
