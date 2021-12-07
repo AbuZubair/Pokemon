@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom';
 import SearchLogo from '../static/images/search-icon.svg';
 import Logo from '../static/images/pokemon-logo-png-1444.png';
 import ListIcon from '@material-ui/icons/List';
+import InfoIcon from '@material-ui/icons/Info';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import { gql, useQuery, useLazyQuery  } from '@apollo/client';
@@ -212,7 +213,15 @@ function Navbar (props) {
                   <span>My List</span>
                 </div>
               </NavLink>
-            }           
+            }    
+            {
+              <NavLink to="/detail" onClick={handleClose}>                
+                <div className="navigation__container-link pseudo-link">
+                  <InfoIcon /> 
+                  <span>About</span>
+                </div>
+              </NavLink>
+            }         
             {localStorage.getItem("userData") !== null &&
               <NavLink to="#" onClick={handleExit}>                               
                 <div className="navigation__container-link pseudo-link">

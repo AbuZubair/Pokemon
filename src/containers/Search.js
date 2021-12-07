@@ -134,14 +134,14 @@ export default function Search (props) {
     if (!isCancelled) {
       const { pokemonRows } = props.history.location;      
       if (pokemonRows && !isCancelled)
-        setPokemons( pokemonRows);  
+        // setPokemons( pokemonRows);  
       prevProps.current = props.location.pokemonRows
     } 
     if (
       prevProps?.location?.pokemonRows?.length !==
       props?.location?.pokemonRows?.length
     ) {         
-      dispatch(fetchAllData());            
+      // dispatch(fetchAllData());            
       let arrOwned = [] 
       arrOwned = props.location.pokemonRows.map(item => {
         return {
@@ -149,8 +149,8 @@ export default function Search (props) {
           count: 0
         }
       });            
-      setOwnedInfo(arrOwned)
-      setPokemons(props.location.pokemonRows);
+      // setOwnedInfo(arrOwned)
+      // setPokemons(props.location.pokemonRows);
       prevOwned.current = arrOwned
     }       
     return () => { 
@@ -163,7 +163,7 @@ export default function Search (props) {
   useEffect(() => {
    
     if(reducer.data){
-      setLoadingOwned(false)
+      // setLoadingOwned(false)
       let wait = true      
       let newOwnedInfo = ownedInfo.map((item,idx) => {
         for (let i = 0; i < reducer.data.length; i++) {          
@@ -179,7 +179,7 @@ export default function Search (props) {
         // console.log(prevOwned.current)
         prevOwned.current = newOwnedInfo
       }        
-      if(!wait)setLoadingOwned(true);
+      // if(!wait)setLoadingOwned(true);
     }
 
   },[reducer,ownedInfo,pokemons]) 
@@ -194,9 +194,9 @@ export default function Search (props) {
       if(prevOwned.current != ownedInfo){        
         prevOwned.current = resetInfoOwned
       }     
-      dispatch(fetchAllData());            
+      // dispatch(fetchAllData());            
     }
-    setFlagAdded(false)
+    // setFlagAdded(false)
   }, [flagAdded]);
 
 

@@ -6,6 +6,7 @@ import NotFound from './NotFound';
 import Search from './Search';
 import Mylist from './Mylist';
 import Navbar from './Navbar';
+import WebDetail from './WebDetail';
 
 const AppRouter = () => (
   // <BrowserRouter>
@@ -15,6 +16,7 @@ const AppRouter = () => (
         <Route path="/" exact component={Home} />
         <Route path="/search" component={Search} />
         <Route path="/mylist" component={Mylist} />
+        <Route path="/detail" component={WebDetail} />
         <Route component={NotFound} />
       </Switch>
     </>
